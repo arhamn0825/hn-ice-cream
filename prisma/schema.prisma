@@ -1,0 +1,185 @@
+// HN Ice Cream — Database Schema
+// Run `npm run db:push` after setting DATABASE_URL to create these tables in Supabase.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique // "Ice Cream" | "Premium Shakes" | "Add-ons"
+  slug      String    @unique
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  name          String
+  slug          String      @unique
+  description   String?
+  price         Decimal     @db.Decimal(10, 2)
+  compareAtPrice Decimal?   @db.Decimal(10, 2) // for showing a discount strike-through
+  imageUrl      String?
+  gallery       String[]    @default([])
+  isBestSeller  Boolean     @default(false)
+  isAvailable   Boolean     @default(true)
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  reviews       Review[]
+  orderItems    OrderItem[]
+  wishlistedBy  Wishlist[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Offer {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String?
+  discountPct Int?
+  code        String?  @unique
+  isActive    Boolean  @default(true)
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime @default(now())
+}
+
+model Customer {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  phone        String?
+  passwordHash String
+  addresses    Address[]
+  orders       Order[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+  createdAt    DateTime   @default(now())
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  label      String   @default("Home")
+  fullAddress String
+  city       String
+  phone      String
+  isDefault  Boolean  @default(false)
+}
+
+model Wishlist {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([customerId, productId])
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  customerId      String?
+  customer        Customer?     @relation(fields: [customerId], references: [id])
+  guestName       String?
+  guestPhone      String?
+  guestEmail      String?
+  items           OrderItem[]
+  subtotal        Decimal       @db.Decimal(10, 2)
+  deliveryCharge  Decimal       @db.Decimal(10, 2) @default(0)
+  total           Decimal       @db.Decimal(10, 2)
+  paymentMethod   PaymentMethod @default(COD)
+  status          OrderStatus   @default(PENDING)
+  deliveryAddress String
+  city            String
+  phone           String
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String  // snapshot at time of order
+  price     Decimal @db.Decimal(10, 2) // snapshot at time of order
+  quantity  Int
+  addOns    String[] @default([]) // e.g. ["Waffle Cone"]
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  productId  String?
+  product    Product? @relation(fields: [productId], references: [id])
+  customerId String?
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  name       String
+  rating     Int      @default(5)
+  comment    String
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  caption   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+// Single-row table holding all editable store settings, managed via the admin panel.
+model Settings {
+  id              String   @id @default("store_settings")
+  storeName       String   @default("HN Ice Cream")
+  logoUrl         String?
+  faviconUrl      String?
+  whatsappNumber  String   @default("+92300000000")
+  contactEmail    String?
+  contactPhone    String?
+  contactAddress  String?
+  mapEmbedUrl     String?
+  deliveryCharge  Decimal  @db.Decimal(10, 2) @default(100)
+  freeDeliveryOver Decimal? @db.Decimal(10, 2)
+  heroHeadline    String?
+  heroSubtext     String?
+  heroImageUrl    String?
+  instagramUrl    String?
+  facebookUrl     String?
+  updatedAt       DateTime @updatedAt
+}

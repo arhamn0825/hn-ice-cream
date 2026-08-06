@@ -1,0 +1,13 @@
+{
+  "name": "HN Ice Cream",
+  "short_name": "HN Ice Cream",
+  "description": "Handcrafted ice cream & premium shakes, delivered fresh.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFDFB",
+  "theme_color": "#7C3AED",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

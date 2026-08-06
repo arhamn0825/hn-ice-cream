@@ -1,0 +1,84 @@
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FiArrowRight } from "react-icons/fi";
+
+export default function Hero() {
+  const [content, setContent] = useState({
+    heroHeadline: "Indulge in Every Scoop",
+    heroSubtext: "Premium ice cream and shakes crafted with real ingredients — a little luxury delivered to your door.",
+    heroImageUrl: "",
+  });
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        setContent((prev) => ({
+          heroHeadline: data?.heroHeadline || prev.heroHeadline,
+          heroSubtext: data?.heroSubtext || prev.heroSubtext,
+          heroImageUrl: data?.heroImageUrl || "",
+        }));
+      })
+      .catch(() => {});
+  }, []);
+
+  const [headlineFirst, ...headlineRest] = content.heroHeadline.split(" ");
+  const headlineEnd = headlineRest.join(" ");
+
+  return (
+    <section className="relative overflow-hidden bg-soft-glow pt-16 pb-24 md:pt-24 md:pb-32">
+      {/* Ambient floating blobs */}
+      <div className="absolute -top-20 -left-20 w-72 h-72 bg-blush-200/50 rounded-full blur-3xl animate-float" />
+      <div className="absolute top-40 -right-10 w-96 h-96 bg-grape-200/50 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+
+      <div className="relative max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <p className="section-eyebrow mb-4">Handcrafted Daily · Delivered Fresh</p>
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] text-ink">
+            {headlineFirst}
+            {headlineEnd && <span className="block italic bg-grape-blush bg-clip-text text-transparent">{headlineEnd}</span>}
+          </h1>
+          <p className="mt-6 text-ink/60 text-lg max-w-md">{content.heroSubtext}</p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link href="/shop" className="btn-primary">
+              Order Now <FiArrowRight />
+            </Link>
+            <Link href="/about" className="btn-outline">
+              Our Story
+            </Link>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative"
+        >
+          {content.heroImageUrl ? (
+            <div className="glass-card aspect-square max-w-md mx-auto relative overflow-hidden animate-float">
+              <Image src={content.heroImageUrl} alt="HN Ice Cream" fill className="object-cover" priority />
+            </div>
+          ) : (
+            <>
+              <div className="glass-card aspect-square max-w-md mx-auto flex items-center justify-center text-[10rem] animate-float">
+                🍦
+              </div>
+              <p className="text-center text-xs text-ink/40 mt-3">
+                Add your own photo via Admin → Store Settings → Homepage Hero Picture
+              </p>
+            </>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
