@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Toaster } from "react-hot-toast";
 import { prisma } from "@/lib/prisma";
+import { getStoreSettings } from "@/lib/getSettings";
 
 // Reads Settings from the database so the browser-tab icon (favicon) and
 // store name update automatically when changed from Admin → Store Settings —
@@ -37,7 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
     manifest: "/manifest.json",
     icons: faviconUrl
       ? { icon: faviconUrl, apple: faviconUrl }
-      : { icon: "/favicon.ico", apple: "/icons/icon-192.png" },
+      : { icon: "/favicon.ico" },
   };
 }
 
@@ -47,7 +48,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+// Settings (logo, store name, WhatsApp number) are fetched once here, on the
+// server, before anything is sent to the browser — so the real logo and
+// WhatsApp button appear instantly, with no placeholder flash.
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getStoreSettings();
+
   return (
     <html lang="en">
       <head>
@@ -59,10 +65,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="font-body bg-cream text-ink antialiased scroll-smooth">
-        <Navbar />
+        <Navbar logoUrl={settings.logoUrl} storeName={settings.storeName} />
         <main className="min-h-screen">{children}</main>
         <Footer />
-        <WhatsAppButton />
+        <WhatsAppButton whatsappNumber={settings.whatsappNumber} />
         <Toaster position="top-center" />
       </body>
     </html>

@@ -3,30 +3,21 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { FiArrowRight } from "react-icons/fi";
 
-export default function Hero() {
-  const [content, setContent] = useState({
-    heroHeadline: "Indulge in Every Scoop",
-    heroSubtext: "Premium ice cream and shakes crafted with real ingredients — a little luxury delivered to your door.",
-    heroImageUrl: "",
-  });
-
-  useEffect(() => {
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => {
-        setContent((prev) => ({
-          heroHeadline: data?.heroHeadline || prev.heroHeadline,
-          heroSubtext: data?.heroSubtext || prev.heroSubtext,
-          heroImageUrl: data?.heroImageUrl || "",
-        }));
-      })
-      .catch(() => {});
-  }, []);
-
-  const [headlineFirst, ...headlineRest] = content.heroHeadline.split(" ");
+// heroHeadline/heroSubtext/heroImageUrl arrive as props, fetched server-side
+// by the homepage before it's sent to the browser — no client-side fetch, no
+// placeholder flash before your real picture shows up.
+export default function Hero({
+  heroHeadline,
+  heroSubtext,
+  heroImageUrl,
+}: {
+  heroHeadline: string;
+  heroSubtext: string;
+  heroImageUrl: string | null;
+}) {
+  const [headlineFirst, ...headlineRest] = heroHeadline.split(" ");
   const headlineEnd = headlineRest.join(" ");
 
   return (
@@ -46,7 +37,7 @@ export default function Hero() {
             {headlineFirst}
             {headlineEnd && <span className="block italic bg-grape-blush bg-clip-text text-transparent">{headlineEnd}</span>}
           </h1>
-          <p className="mt-6 text-ink/60 text-lg max-w-md">{content.heroSubtext}</p>
+          <p className="mt-6 text-ink/60 text-lg max-w-md">{heroSubtext}</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/shop" className="btn-primary">
               Order Now <FiArrowRight />
@@ -63,9 +54,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="relative"
         >
-          {content.heroImageUrl ? (
-            <div className="glass-card aspect-square max-w-md mx-auto relative overflow-hidden animate-float">
-              <Image src={content.heroImageUrl} alt="HN Ice Cream" fill className="object-cover" priority />
+          {heroImageUrl ? (
+            <div className="glass-card aspect-square max-w-lg mx-auto relative overflow-hidden animate-float">
+              <Image src={heroImageUrl} alt="HN Ice Cream" fill className="object-cover" priority />
             </div>
           ) : (
             <>

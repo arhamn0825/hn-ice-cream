@@ -105,7 +105,7 @@ model Order {
   id              String        @id @default(cuid())
   orderNumber     String        @unique
   customerId      String?
-  customer        Customer?     @relation(fields: [customerId], references: [id])
+  customer        Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
   guestName       String?
   guestPhone      String?
   guestEmail      String?
@@ -140,7 +140,7 @@ model Review {
   productId  String?
   product    Product? @relation(fields: [productId], references: [id])
   customerId String?
-  customer   Customer? @relation(fields: [customerId], references: [id])
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
   name       String
   rating     Int      @default(5)
   comment    String
@@ -161,6 +161,18 @@ model Admin {
   username     String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
+}
+
+// Multiple shop locations — each shows on the homepage map section with its
+// own name (e.g. "Rahat Commercial Branch") and its own Google Maps embed.
+// Fully manageable from Admin → Branches: add, edit, delete, reorder.
+model Branch {
+  id          String   @id @default(cuid())
+  name        String
+  address     String?
+  mapEmbedUrl String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
 }
 
 // Single-row table holding all editable store settings, managed via the admin panel.

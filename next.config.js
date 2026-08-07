@@ -5,9 +5,6 @@ const nextConfig = {
       { protocol: "https", hostname: "**.supabase.co" }, // Supabase Storage images
     ],
   },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
 };
 
 module.exports = nextConfig;

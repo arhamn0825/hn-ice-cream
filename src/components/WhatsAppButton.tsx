@@ -2,21 +2,11 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
-// Number is editable from Admin → Store Settings (Settings.whatsappNumber in the DB).
-// This component fetches it from /api/settings so it never needs a code change.
-export default function WhatsAppButton() {
-  const [number, setNumber] = useState<string>("+92300000000");
-
-  useEffect(() => {
-    fetch("/api/settings")
-      .then((res) => res.json())
-      .then((data) => data?.whatsappNumber && setNumber(data.whatsappNumber))
-      .catch(() => {});
-  }, []);
-
-  const digits = number.replace(/[^0-9]/g, "");
+// Number arrives as a prop, already fetched server-side — editable anytime
+// from Admin → Store Settings, with no client-side fetch delay.
+export default function WhatsAppButton({ whatsappNumber }: { whatsappNumber: string }) {
+  const digits = whatsappNumber.replace(/[^0-9]/g, "");
 
   return (
     <motion.a

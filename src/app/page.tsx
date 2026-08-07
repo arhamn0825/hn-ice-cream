@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { getStoreSettings } from "@/lib/getSettings";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import ReviewsSection from "@/components/ReviewsSection";
@@ -27,11 +28,14 @@ async function getHomeData() {
 }
 
 export default async function HomePage() {
-  const { bestSellers, iceCream, shakes, offers } = await getHomeData();
+  const [{ bestSellers, iceCream, shakes, offers }, settings] = await Promise.all([
+    getHomeData(),
+    getStoreSettings(),
+  ]);
 
   return (
     <>
-      <Hero />
+      <Hero heroHeadline={settings.heroHeadline} heroSubtext={settings.heroSubtext} heroImageUrl={settings.heroImageUrl} />
 
       {/* Today's Offers */}
       {offers.length > 0 && (
