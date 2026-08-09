@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { FiTrash2 } from "react-icons/fi";
 
 type Order = {
   id: string;
   orderNumber: string;
   guestName: string | null;
+  guestEmail: string | null;
   phone: string;
+  deliveryAddress: string;
   city: string;
   total: number;
   status: string;
@@ -34,6 +37,17 @@ export default function OrdersTable({ initialOrders }: { initialOrders: Order[] 
     }
   };
 
+  const handleDelete = async (id: string, orderNumber: string) => {
+    if (!confirm(`Delete order ${orderNumber}? This can't be undone.`)) return;
+    const res = await fetch(`/api/orders/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setOrders((prev) => prev.filter((o) => o.id !== id));
+      toast.success("Order deleted");
+    } else {
+      const data = await res.json().catch(() => null);
+      toast.error(data?.error || "Failed to delete order");
+    }
+  };
   return (
     <div className="glass-card overflow-x-auto">
       <table className="w-full text-sm">
@@ -41,21 +55,28 @@ export default function OrdersTable({ initialOrders }: { initialOrders: Order[] 
           <tr className="text-left text-ink/50 border-b border-ink/10">
             <th className="p-4">Order #</th>
             <th className="p-4">Customer</th>
+            <th className="p-4">Delivery Address</th>
             <th className="p-4">Items</th>
             <th className="p-4">Total</th>
             <th className="p-4">Status</th>
+            <th className="p-4"></th>
           </tr>
         </thead>
         <tbody>
           {orders.map((o) => (
             <tr key={o.id} className="border-b border-ink/5 last:border-0 align-top">
               <td className="p-4 font-medium whitespace-nowrap">{o.orderNumber}</td>
-              <td className="p-4">
-                <p>{o.guestName}</p>
-                <p className="text-ink/40 text-xs">{o.phone} · {o.city}</p>
+              <td className="p-4 min-w-[160px]">
+                <p className="font-medium">{o.guestName}</p>
+                <p className="text-ink/50 text-xs">{o.phone}</p>
+                {o.guestEmail && <p className="text-ink/50 text-xs">{o.guestEmail}</p>}
+              </td>
+              <td className="p-4 text-ink/60 max-w-[200px]">
+                <p>{o.deliveryAddress}</p>
+                <p className="text-ink/40 text-xs">{o.city}</p>
               </td>
               <td className="p-4 text-ink/60 max-w-xs">{o.items.map((i) => `${i.name} ×${i.quantity}`).join(", ")}</td>
-              <td className="p-4 font-medium">Rs {o.total}</td>
+              <td className="p-4 font-medium whitespace-nowrap">Rs {o.total}</td>
               <td className="p-4">
                 <select
                   value={o.status}
@@ -64,6 +85,11 @@ export default function OrdersTable({ initialOrders }: { initialOrders: Order[] 
                 >
                   {statuses.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}
                 </select>
+              </td>
+              <td className="p-4">
+                <button onClick={() => handleDelete(o.id, o.orderNumber)} className="p-2 rounded-lg hover:bg-blush-50 text-blush-500" title="Delete order">
+                  <FiTrash2 size={16} />
+                </button>
               </td>
             </tr>
           ))}

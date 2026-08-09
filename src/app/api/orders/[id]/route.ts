@@ -12,12 +12,16 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   return NextResponse.json(order);
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getAdminSession();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!admin) return NextResponse.json({ error: "Unauthorized — please log back into the admin panel" }, { status: 401 });
 
   const { id } = await params;
-  const { status } = await req.json();
-  const order = await prisma.order.update({ where: { id }, data: { status } });
-  return NextResponse.json(order);
+  try {
+    await prisma.order.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "Could not delete this order" }, { status: 500 });
+  }
 }
+

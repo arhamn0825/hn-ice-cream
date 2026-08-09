@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://hnicecream.com"),
     title: {
-      default: `${storeName} — Handcrafted Ice Cream & Premium Shakes`,
+      default: storeName,
       template: `%s | ${storeName}`,
     },
     description:

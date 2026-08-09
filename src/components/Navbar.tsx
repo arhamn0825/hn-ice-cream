@@ -14,7 +14,6 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
-  { href: "/faq", label: "FAQ" },
 ];
 
 export default function Navbar({ logoUrl, storeName }: { logoUrl: string | null; storeName: string }) {
@@ -59,7 +58,7 @@ export default function Navbar({ logoUrl, storeName }: { logoUrl: string | null;
           </button>
 
           <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
-            <Logo size={68} />
+            <Logo size={75} />
           </Link>
 
           <div className="flex items-center gap-2">
@@ -87,7 +86,7 @@ export default function Navbar({ logoUrl, storeName }: { logoUrl: string | null;
             <Logo size={80} />
           </Link>
 
-          <ul className="flex items-center gap-8 text-base font-medium text-ink/80">
+          <ul className="flex items-center gap-8 text-lg font-medium text-ink/80">
             {links.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="hover:text-grape-500 transition-colors">
@@ -121,7 +120,6 @@ export default function Navbar({ logoUrl, storeName }: { logoUrl: string | null;
         <motion.ul
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          // className="lg:hidden glass px-5 pb-5 flex flex-col gap-3" for left size navbar menu
           className="lg:hidden glass px-5 pb-5 flex flex-col items-center text-center gap-3"
         >
           {links.map((l) => (

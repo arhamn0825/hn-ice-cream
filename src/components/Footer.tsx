@@ -29,9 +29,9 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">Support</h4>
           <ul className="space-y-2 text-sm text-white/60">
-            <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
+            
             <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
-            <li><Link href="/dashboard" className="hover:text-white">Track Order</Link></li>
+            
           </ul>
         </div>
 
@@ -39,8 +39,8 @@ export default function Footer() {
           <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">Get in Touch</h4>
           <ul className="space-y-3 text-sm text-white/60">
             <li className="flex items-center justify-center sm:justify-start gap-2"><FiMapPin /> Karachi, Pakistan</li>
-            <li className="flex items-center justify-center sm:justify-start gap-2"><FiPhone /> +92 300 0000000</li>
-            <li className="flex items-center justify-center sm:justify-start gap-2"><FiMail /> hello@hnicecream.com</li>
+            <li className="flex items-center justify-center sm:justify-start gap-2"><FiPhone /> +92 302 0274446</li>
+            <li className="flex items-center justify-center sm:justify-start gap-2"><FiMail /> infohnicecream@gmail.com</li>
           </ul>
         </div>
       </div>

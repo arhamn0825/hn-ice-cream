@@ -111,6 +111,8 @@ model Order {
   guestEmail      String?
   items           OrderItem[]
   subtotal        Decimal       @db.Decimal(10, 2)
+  discountAmount  Decimal       @db.Decimal(10, 2) @default(0)
+  offerTitle      String?
   deliveryCharge  Decimal       @db.Decimal(10, 2) @default(0)
   total           Decimal       @db.Decimal(10, 2)
   paymentMethod   PaymentMethod @default(COD)

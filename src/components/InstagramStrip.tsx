@@ -14,7 +14,7 @@ export default async function InstagramStrip() {
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5 md:px-8">
         <div className="flex items-center justify-center gap-2 mb-8">
-          <FiInstagram className="text-grape-500" />
+          <FiInstagram className="text-grape-500 text-4xl" />
           <h2 className="section-title text-center">@hnicecream</h2>
         </div>
         {images.length > 0 ? (

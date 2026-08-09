@@ -13,16 +13,20 @@ export default async function AdminOrdersPage() {
   }
 
   return (
+
     <div>
-      <h1 className="font-display text-3xl mb-8">Orders</h1>
+      
       <OrdersTable
         initialOrders={orders.map((o) => ({
           ...o,
           subtotal: Number(o.subtotal),
+          discountAmount: Number(o.discountAmount),
           deliveryCharge: Number(o.deliveryCharge),
           total: Number(o.total),
+          items: o.items.map((i: any) => ({ ...i, price: Number(i.price) })),
         }))}
       />
     </div>
   );
 }
+

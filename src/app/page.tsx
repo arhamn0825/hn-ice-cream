@@ -7,6 +7,7 @@ import Newsletter from "@/components/Newsletter";
 import InstagramStrip from "@/components/InstagramStrip";
 import StoreMap from "@/components/StoreMap";
 import Link from "next/link";
+import Image from "next/image";
 import { FiArrowRight } from "react-icons/fi";
 
 export const revalidate = 60; // ISR — homepage refreshes every 60s as admin edits products
@@ -48,10 +49,17 @@ export default async function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {offers.map((o) => (
-              <div key={o.id} className="glass-card p-6">
-                <h3 className="font-display text-xl mb-2">{o.title}</h3>
-                <p className="text-ink/60 text-sm">{o.description}</p>
-              </div>
+              <Link key={o.id} href="/offers" className="glass-card overflow-hidden block">
+                {o.imageUrl ? (
+                  <div className="relative w-full aspect-video">
+                    <Image src={o.imageUrl} alt={o.title} fill className="object-cover" />
+                  </div>
+                ) : null}
+                <div className="p-6">
+                  <h3 className="font-display text-xl mb-2">{o.title}</h3>
+                  <p className="text-ink/60 text-sm">{o.description}</p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>

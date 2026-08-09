@@ -55,7 +55,7 @@ export default function Hero({
           className="relative"
         >
           {heroImageUrl ? (
-            <div className="glass-card aspect-square max-w-lg mx-auto relative overflow-hidden animate-float">
+            <div className="glass-card aspect-square max-w-xl mx-auto relative overflow-hidden animate-float">
               <Image src={heroImageUrl} alt="HN Ice Cream" fill className="object-cover" priority />
             </div>
           ) : (
