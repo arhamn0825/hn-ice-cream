@@ -23,8 +23,8 @@ export default function Hero({
   return (
     <section className="relative overflow-hidden bg-soft-glow pt-16 pb-24 md:pt-24 md:pb-32">
       {/* Ambient floating blobs */}
-      <div className="absolute -top-20 -left-20 w-72 h-72 bg-blush-200/50 rounded-full blur-3xl animate-float" />
-      <div className="absolute top-40 -right-10 w-96 h-96 bg-grape-200/50 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+      <div className="hidden md:block absolute -top-20 -left-20 w-72 h-72 bg-blush-200/50 rounded-full blur-3xl animate-float" />
+      <div className="hidden md:block absolute top-40 -right-10 w-96 h-96 bg-grape-200/50 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
 
       <div className="relative max-w-7xl mx-auto px-5 md:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <motion.div

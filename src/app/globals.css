@@ -13,7 +13,7 @@
 
 @layer components {
   .glass {
-    @apply bg-white/60 backdrop-blur-xl border border-white/70 shadow-glass;
+    @apply bg-white/70 backdrop-blur-md border border-white/70 shadow-glass;
   }
   .glass-card {
     @apply glass rounded-4xl transition-all duration-300 hover:shadow-glass-lg hover:-translate-y-1;

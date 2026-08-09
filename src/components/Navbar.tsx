@@ -47,7 +47,7 @@ export default function Navbar({ logoUrl, storeName }: { logoUrl: string | null;
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-glass" : "bg-transparent"
+        scrolled ? "bg-white/95 shadow-glass" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-3 lg:py-4">
