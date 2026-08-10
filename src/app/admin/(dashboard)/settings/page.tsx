@@ -22,6 +22,7 @@ export default async function AdminSettingsPage() {
                 faviconUrl: "",
                 heroImageUrl: "",
                 whatsappNumber: "+92300000000",
+                orderNotificationEmail: "",
                 contactEmail: "",
                 contactPhone: "",
                 contactAddress: "",

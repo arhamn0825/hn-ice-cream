@@ -184,6 +184,7 @@ model Settings {
   logoUrl         String?
   faviconUrl      String?
   whatsappNumber  String   @default("+92300000000")
+  orderNotificationEmail String?
   contactEmail    String?
   contactPhone    String?
   contactAddress  String?

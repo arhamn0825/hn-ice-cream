@@ -39,6 +39,10 @@ export default function SettingsForm({ initialSettings }: { initialSettings: any
 
       <Field label="Store Name" value={form.storeName} onChange={(v) => set("storeName", v)} />
       <Field label="WhatsApp Number (with country code)" value={form.whatsappNumber} onChange={(v) => set("whatsappNumber", v)} />
+      <div>
+        <Field label="Order Notification Email (where you get alerted about new orders)" value={form.orderNotificationEmail ?? ""} onChange={(v) => set("orderNotificationEmail", v)} />
+        <p className="text-xs text-ink/40 mt-1">This is private — only used to notify you, never shown to customers.</p>
+      </div>
       <Field label="Delivery Charge (Rs)" type="number" value={form.deliveryCharge} onChange={(v) => set("deliveryCharge", v)} />
       <Field label="Contact Email" value={form.contactEmail ?? ""} onChange={(v) => set("contactEmail", v)} />
       <Field label="Contact Phone" value={form.contactPhone ?? ""} onChange={(v) => set("contactPhone", v)} />

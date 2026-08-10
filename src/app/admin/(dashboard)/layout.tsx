@@ -15,7 +15,7 @@ const navItems = [
   { href: "/admin/newsletter", label: "Newsletter", icon: FiMail },
   { href: "/admin/settings", label: "Store Settings", icon: FiSettings },
   { href: "/admin/account", label: "My Account", icon: FiUser },
-  { href: "/admin/danger-zone", label: "Sweet Reset", icon: FiAlertTriangle },
+  { href: "/admin/sweet-reset", label: "Sweet Reset", icon: FiAlertTriangle },
 ];
 // import { FiGrid, FiShoppingBag, FiPackage, FiSettings, FiImage, FiUsers, FiLogOut, FiTag, FiMapPin, FiPercent, FiMail, FiAlertTriangle } from "react-icons/fi";
 

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession, getAdminSession } from "@/lib/auth";
 import { isValidPKPhone, normalizePKPhone } from "@/lib/phone";
+import { sendOrderNotificationEmail } from "@/lib/email";
 import { z } from "zod";
 
 const orderSchema = z.object({
@@ -83,6 +84,24 @@ export async function POST(req: NextRequest) {
     },
     include: { items: true },
   });
+
+  try {
+    const settings = await prisma.settings.findUnique({ where: { id: "store_settings" } });
+    if (settings?.orderNotificationEmail) {
+      await sendOrderNotificationEmail({
+        to: settings.orderNotificationEmail,
+        orderNumber: order.orderNumber,
+        customerName: data.guestName,
+        phone: normalizePKPhone(data.phone),
+        address: data.deliveryAddress,
+        city: data.city,
+        total,
+        items: data.items,
+      });
+    }
+  } catch {
+    // Notification is a nice-to-have, never let it affect the customer's order.
+  }
 
   return NextResponse.json(order, { status: 201 });
 }
