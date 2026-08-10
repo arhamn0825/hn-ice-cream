@@ -12,6 +12,20 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   return NextResponse.json(order);
 }
 
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const admin = await getAdminSession();
+  if (!admin) return NextResponse.json({ error: "Unauthorized — please log back into the admin panel" }, { status: 401 });
+
+  const { id } = await params;
+  const { status } = await req.json();
+  try {
+    const order = await prisma.order.update({ where: { id }, data: { status } });
+    return NextResponse.json(order);
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "Could not update this order" }, { status: 500 });
+  }
+}
+
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getAdminSession();
   if (!admin) return NextResponse.json({ error: "Unauthorized — please log back into the admin panel" }, { status: 401 });
@@ -24,4 +38,3 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: err?.message || "Could not delete this order" }, { status: 500 });
   }
 }
-

@@ -27,7 +27,7 @@ export default async function DashboardPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="section-eyebrow">My Account</p>
-          <h1 className="section-title">Hi, {session.name.split(" ")[0]} 👋</h1>
+          <h1 className="section-title">Hi, {session.name.split(" ")[0]}</h1>
         </div>
         <LogoutButton />
       </div>

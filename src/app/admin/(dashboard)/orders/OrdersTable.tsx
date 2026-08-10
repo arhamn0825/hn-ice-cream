@@ -33,7 +33,8 @@ export default function OrdersTable({ initialOrders }: { initialOrders: Order[] 
       setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status } : o)));
       toast.success("Order status updated");
     } else {
-      toast.error("Failed to update status");
+      const data = await res.json().catch(() => null);
+      toast.error(data?.error || "Failed to update status");
     }
   };
 
