@@ -33,6 +33,15 @@ export default async function Footer() {
         </div>
 
         <div>
+          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">Explore</h4>
+          <ul className="space-y-2 text-sm text-white/60">
+            <li><Link href="/shop" className="hover:text-white">Menu</Link></li>
+            <li><Link href="/offers" className="hover:text-white">Offers</Link></li>
+            <li><Link href="/gallery" className="hover:text-white">Gallery</Link></li>
+            <li><Link href="/about" className="hover:text-white">About Us</Link></li>
+          </ul>
+        </div>
+        <div>
           <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">
             {branches.length > 1 ? "Our Locations" : "Our Location"}
           </h4>
@@ -54,15 +63,7 @@ export default async function Footer() {
             </p>
           )}
         </div>
-        <div>
-          <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">Explore</h4>
-          <ul className="space-y-2 text-sm text-white/60">
-            <li><Link href="/shop" className="hover:text-white">Menu</Link></li>
-            <li><Link href="/offers" className="hover:text-white">Offers</Link></li>
-            <li><Link href="/gallery" className="hover:text-white">Gallery</Link></li>
-            <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-          </ul>
-        </div>
+
 
         <div>
           <h4 className="font-semibold mb-4 text-sm uppercase tracking-wider text-white/70">Get in Touch</h4>
@@ -85,3 +86,4 @@ export default async function Footer() {
     </footer>
   );
 }
+
