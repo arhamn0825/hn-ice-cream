@@ -21,7 +21,7 @@ export default async function OffersPage() {
 
       {offers.length === 0 ? (
         <p className="text-ink/40 py-16 text-center">
-          No active offers right now — check back soon, or add one from Admin → Offers.
+          {/* No active offers right now — check back soon, or add one from Admin → Offers. */}
         </p>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
