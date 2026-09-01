@@ -17,7 +17,7 @@ async function getHomeData() {
   // so the site still renders before Supabase/Prisma is connected.
   try {
     const [bestSellers, iceCream, shakes, offers] = await Promise.all([
-      prisma.product.findMany({ where: { isBestSeller: true, isAvailable: true }, take: 4 }),
+      prisma.product.findMany({ where: { isBestSeller: true, isAvailable: true }, orderBy: { updatedAt: "desc" }, take: 8 }),
       prisma.product.findMany({ where: { category: { name: "Ice Cream" }, isAvailable: true }, take: 4 }),
       prisma.product.findMany({ where: { category: { name: "Premium Shakes" }, isAvailable: true }, take: 4 }),
       prisma.offer.findMany({ where: { isActive: true }, take: 3 }),
