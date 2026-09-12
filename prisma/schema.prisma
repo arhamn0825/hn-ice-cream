@@ -116,6 +116,9 @@ model Order {
   deliveryCharge  Decimal       @db.Decimal(10, 2) @default(0)
   total           Decimal       @db.Decimal(10, 2)
   paymentMethod   PaymentMethod @default(COD)
+    orderType       String        @default("DELIVERY")
+  deliveryArea    String?
+  pickupBranch    String?
   status          OrderStatus   @default(PENDING)
   deliveryAddress String
   city            String
@@ -175,6 +178,14 @@ model Branch {
   mapEmbedUrl String
   sortOrder   Int      @default(0)
   createdAt   DateTime @default(now())
+}
+
+model DeliveryArea {
+  id        String   @id @default(cuid())
+  name      String
+  charge    Decimal  @db.Decimal(10, 2)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
 }
 
 // Single-row table holding all editable store settings, managed via the admin panel.

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FiAlertTriangle } from "react-icons/fi";
+import { FiAlertTriangle, FiLock } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
 const options = [
@@ -23,11 +23,65 @@ const options = [
   },
 ];
 
+function PinGate({ onUnlock }: { onUnlock: () => void }) {
+  const [pin, setPin] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetch("/api/admin/verify-reset-pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Incorrect PIN");
+      sessionStorage.setItem("reset_unlocked", "true");
+      onUnlock();
+    } catch (err: any) {
+      toast.error(err.message);
+      setPin("");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="max-w-sm mx-auto mt-20 text-center">
+      <div className="w-14 h-14 rounded-full bg-ink/5 flex items-center justify-center mx-auto mb-4">
+        <FiLock className="text-2xl text-ink/40" />
+      </div>
+      <h1 className="font-display text-2xl mb-2">Enter Your Secret PIN</h1>
+      <p className="text-sm text-ink/50 mb-6">This area is extra-locked. Only you know this code.</p>
+      <form onSubmit={handleSubmit} className="flex gap-2">
+        <input
+          type="password"
+          autoFocus
+          value={pin}
+          onChange={(e) => setPin(e.target.value)}
+          className="flex-1 px-4 py-2.5 rounded-xl border border-ink/10 text-center tracking-widest"
+          placeholder="••••••"
+        />
+        <button disabled={loading} className="btn-primary shrink-0">Unlock</button>
+      </form>
+    </div>
+  );
+}
+
 export default function DangerZonePage() {
   const router = useRouter();
+  const [unlocked, setUnlocked] = useState(
+    () => typeof window !== "undefined" && sessionStorage.getItem("reset_unlocked") === "true"
+  );
   const [confirmTarget, setConfirmTarget] = useState<string | null>(null);
   const [confirmText, setConfirmText] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!unlocked) {
+    return <PinGate onUnlock={() => setUnlocked(true)} />;
+  }
 
   const handleClear = async (target: string) => {
     if (confirmText !== "DELETE") {
@@ -61,7 +115,7 @@ export default function DangerZonePage() {
         <h1 className="font-display text-3xl">Sweet Reset</h1>
       </div>
       <p className="text-ink/50 text-sm mb-8">
-        These actions permanently delete data and can&apos;t be undone. Use this to reset test data before going fully live, or to clear old records anytime.
+        These actions permanently delete data and can&apos;t be undone.
       </p>
 
       <div className="space-y-4">

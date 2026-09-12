@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { Toaster } from "react-hot-toast";
+import DeliverySelectModal from "@/components/DeliverySelectModal";
 import { prisma } from "@/lib/prisma";
 import { getStoreSettings } from "@/lib/getSettings";
 
@@ -65,6 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className="font-body bg-cream text-ink antialiased scroll-smooth">
+      <DeliverySelectModal />
         <Navbar logoUrl={settings.logoUrl} storeName={settings.storeName} />
         <main className="min-h-screen">{children}</main>
         <Footer />
