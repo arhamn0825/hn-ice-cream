@@ -11,11 +11,7 @@ export async function POST(req: NextRequest) {
   const { pin } = await req.json();
   const correctPin = process.env.OWNER_RESET_PIN;
 
-  if (!correctPin) {
-    return NextResponse.json({ error: "PIN not configured yet — add OWNER_RESET_PIN to your .env file" }, { status: 500 });
-  }
-
-  if (pin !== correctPin) {
+  if (!correctPin || pin !== correctPin) {
     return NextResponse.json({ error: "Incorrect PIN" }, { status: 403 });
   }
 
